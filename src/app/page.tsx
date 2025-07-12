@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FiArrowUpRight } from "react-icons/fi";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -21,7 +20,19 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userId, setUserId] = useState<string>("");
+
+  // Generate UUID on component mount
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('cipher44_user_id');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      const newUserId = uuidv4();
+      localStorage.setItem('cipher44_user_id', newUserId);
+      setUserId(newUserId);
+    }
+  }, []);
 
   const handleSubmit = async () => {
     const prompt = textAreaRef.current?.value;
@@ -34,7 +45,11 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ 
+          prompt,
+          userId,
+          type: 'prompt'
+        }),
       });
 
       if (!response.ok) {
@@ -58,13 +73,28 @@ export default function Home() {
     }
   };
 
-  const handleEmailSignup = async (e: React.FormEvent) => {
+  const handleWaitlistSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const response = await fetch('/api/prompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          email,
+          type: 'waitlist'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to join waitlist');
+      }
+
       setIsRegistered(true);
     } catch (error) {
-      console.error("Email signup error:", error);
+      console.error("Waitlist signup error:", error);
     }
   };
 
@@ -111,7 +141,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Beta Registration Dialog */}
+      {/* Waitlist Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -119,27 +149,18 @@ export default function Home() {
             <DialogDescription>
               {isRegistered 
                 ? "Cipher44 is currently in closed beta - Thanks for registering to the waitlist, we will let you know once it is ready for you!"
-                : "Sign up to join the waitlist and we'll notify you when Cipher44 is ready."}
+                : "Join the waitlist and we'll notify you when Cipher44 is ready."}
             </DialogDescription>
           </DialogHeader>
           {!isRegistered && (
-            <form onSubmit={handleEmailSignup} className="flex flex-col gap-3 mt-4">
+            <form onSubmit={handleWaitlistSignup} className="flex flex-col gap-3 mt-4">
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                minLength={6}
               />
               <Button 
                 type="submit" 

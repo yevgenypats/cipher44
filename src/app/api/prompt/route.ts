@@ -5,11 +5,19 @@ import { JWT } from 'google-auth-library';
 
 export async function POST(request: Request) {
   try {
-    const { prompt } = await request.json();
+    const { prompt, userId, email, type } = await request.json();
 
-    if (!prompt) {
+    // Validate required fields based on type
+    if (type === 'prompt' && !prompt) {
       return NextResponse.json(
         { error: 'Prompt is required' },
+        { status: 400 }
+      );
+    }
+
+    if (type === 'waitlist' && !email) {
+      return NextResponse.json(
+        { error: 'Email is required' },
         { status: 400 }
       );
     }
@@ -31,24 +39,21 @@ export async function POST(request: Request) {
 
     // Get the sheet or create it if it doesn't exist
     let sheet = doc.sheetsByTitle['Sheet1'];
-    // if (!sheet) {
-    //   sheet = await doc.addSheet({ 
-    //     title: GOOGLE_SHEETS_CONFIG.sheetName,
-    //     headerValues: ['Timestamp', 'Prompt']
-    //   });
-    // }
 
     // Add the new row
     await sheet.addRow({
       Timestamp: new Date().toISOString(),
-      Prompt: prompt
+      UserId: userId || 'unknown',
+      Type: type,
+      Email: email || '',
+      Prompt: prompt || ''
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error saving prompt:', error);
+    console.error('Error saving data:', error);
     return NextResponse.json(
-      { error: 'Failed to save prompt' },
+      { error: 'Failed to save data' },
       { status: 500 }
     );
   }
