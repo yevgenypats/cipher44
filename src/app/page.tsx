@@ -1,8 +1,6 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { FiArrowUpRight } from "react-icons/fi";
 import React, { useRef, useState, useEffect } from "react";
 import {

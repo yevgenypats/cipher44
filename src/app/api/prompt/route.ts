@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     await doc.loadInfo();
 
     // Get the sheet or create it if it doesn't exist
-    let sheet = doc.sheetsByTitle['Sheet1'];
+    const sheet = doc.sheetsByTitle['Sheet1'];
 
     // Add the new row
     await sheet.addRow({
