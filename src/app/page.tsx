@@ -137,6 +137,96 @@ export default function Home() {
             </Button>
           </div>
         </div>
+
+        {/* Database Integrations */}
+        <div className="mt-8 text-center">
+          <p className="text-white/60 mb-4">Works great with</p>
+          <div className="flex items-center justify-center gap-8">
+            {/* Snowflake */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#29B5E8]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/snowflake.svg" 
+                  alt="Snowflake" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">Snowflake</span>
+            </div>
+
+            {/* Databricks */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#FF3621]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/databricks.svg" 
+                  alt="Databricks" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">Databricks</span>
+            </div>
+
+            {/* Redshift */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#FF3621]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/redshift.svg" 
+                  alt="Redshift" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">Redshift</span>
+            </div>
+
+            {/* ClickHouse */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#FFCC01]/20 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/clickhouse.svg" 
+                  alt="ClickHouse" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">ClickHouse</span>
+            </div>
+
+            {/* PostgreSQL */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#336791]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/postgresql.svg" 
+                  alt="PostgreSQL" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">PostgreSQL</span>
+            </div>
+
+            {/* BigQuery */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#4285F4]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/bigquery.svg" 
+                  alt="BigQuery" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">BigQuery</span>
+            </div>
+
+            {/* MongoDB */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 bg-[#00ED64]/10 rounded-lg flex items-center justify-center">
+                <img 
+                  src="/assets/integrations/mongodb.svg" 
+                  alt="MongoDB" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <span className="text-xs text-white/40">MongoDB</span>
+            </div>
+          </div>
+        </div>
       </main>
 
       {/* Waitlist Dialog */}
